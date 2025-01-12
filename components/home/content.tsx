@@ -1,69 +1,44 @@
 "use client";
 import React from "react";
-import dynamic from "next/dynamic";
-import { TableWrapper } from "../tabletask/table";
-import { CardBalance1 } from "./card-balance1";
-import { CardBalance2 } from "./card-balance2";
-import { CardBalance3 } from "./card-balance3";
-import { CardAgents } from "./card-agents";
-import { CardTransactions } from "./card-transactions";
 import { Link } from "@nextui-org/react";
 import NextLink from "next/link";
 
-const Chart = dynamic(
-  () => import("../charts/steam").then((mod) => mod.Steam),
-  {
-    ssr: false,
-  }
-);
-
 export const Content = () => (
-  <div className="h-full lg:px-6">
-    <div className="flex justify-center gap-4 xl:gap-6 pt-3 px-4 lg:px-0  flex-wrap xl:flex-nowrap sm:pt-10 max-w-[90rem] mx-auto w-full">
-      <div className="mt-6 gap-6 flex flex-col w-full">
-        {/* Card Section Top */}
-        <div className="flex flex-col gap-2">
-          <h3 className="text-xl font-semibold">Monitoring Customer</h3>
-          <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-3 gap-5  justify-center w-full">
-            <CardBalance1 />
-            <CardBalance2 />
-            <CardBalance3 />
-          </div>
-        </div>
-
-        {/* Chart */}
-        <div className="h-full flex flex-col gap-2">
-          <h3 className="text-xl font-semibold">Statistics Device</h3>
-          <div className="w-full bg-default-50 shadow-lg rounded-2xl p-6 ">
-            <Chart />
-          </div>
-        </div>
-      </div>
-
-      {/* Left Section */}
-      <div className="mt-4 gap-2 flex flex-col xl:max-w-md w-full">
-        <h3 className="text-xl font-semibold">Section</h3>
-        <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col">
-          <CardAgents />
-          <CardTransactions />
-        </div>
-      </div>
+  <div className="h-full flex flex-col items-center justify-center text-center py-10 px-6 bg-white text-gray-800">
+    {/* Welcome Section */}
+    <div className="max-w-4xl">
+      <h1 className="text-4xl font-bold mb-4 text-blue-600">Welcome to the Manual Material Handling Tasks – Ergonomic Risk Assessment System (MMH-ERAS)</h1>
+      <p className="text-lg mb-6 text-gray-700">
+        MMH-ERAS is a comprehensive system designed to assess and minimize ergonomic risks associated with manual material handling tasks. It provides tools and resources to help organizations identify potential hazards, implement safer practices, and ensure the well-being of workers.
+      </p>
+      <p className="text-lg mb-6 text-gray-700">
+        With MMH-ERAS, you can analyze task-specific risks, generate detailed reports, and track progress towards creating a safer work environment. Join us in promoting ergonomic safety and improving productivity.
+      </p>
     </div>
 
-    {/* Table Latest Users */}
-    <div className="flex flex-col justify-center w-full py-5 px-4 lg:px-0  max-w-[90rem] mx-auto gap-3">
-      <div className="flex  flex-wrap justify-between">
-        <h3 className="text-center text-xl font-semibold">Latest Users</h3>
-        <Link
-          href="/accounts"
-          as={NextLink}
-          color="primary"
-          className="cursor-pointer"
-        >
-          View All
-        </Link>
-      </div>
-      <TableWrapper />
+    {/* Navigation Buttons */}
+    <div className="flex flex-wrap gap-4 justify-center mt-8">
+      <Link
+        href="/asess"
+        as={NextLink}
+        className="bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200"
+      >
+        Get Started
+      </Link>
+      <Link
+        href="/learnmore"
+        as={NextLink}
+        className="bg-purple-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-purple-600 transition duration-200"
+      >
+        Learn More
+      </Link>
     </div>
+
+    {/* Decorative Footer */}
+    <footer className="mt-10 text-sm text-gray-600">
+      <p>
+        Empowering workplaces through ergonomic innovation. | © {new Date().getFullYear()} MMH-ERAS
+      </p>
+    </footer>
   </div>
 );

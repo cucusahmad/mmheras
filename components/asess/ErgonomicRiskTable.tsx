@@ -138,11 +138,16 @@ export const ErgonomicRiskTable: React.FC = () => {
   // Social Support (example of adding)
   const socialSupportScore = socialSupportValue;
 
+  const [gender, setGender] = useState("male"); // Default gender is male
+
+  const handleGenderChange = (event:any) => {
+    setGender(event.target.value);
+  };
+
   const totalBPScore =
   neckBPscore +
   backBPscore +
   shoulderBPscore +
-  upperArmBPscore +
   lowerArmBPscore +
   wristBPscore +
   kneeBPscore +
@@ -158,7 +163,6 @@ const totalMDLScore =
   neckmdlValue +
   backmdlValue +
   (shouldermdlLeftValue + shouldermdlRightValue) +
-  (upperArmmdlLeftValue + upperArmmdlRightValue) +
   (lowerArmmdlLeftValue + lowerArmmdlRightValue) +
   (wristmdlLeftValue + wristmdlRightValue) +
   (kneemdlLeftValue + kneemdlRightValue) +
@@ -169,7 +173,6 @@ const totalScore =
   necktotalscore +
   backtotalscore +
   shouldertotalscore +
-  upperArmtotalscore +
   lowerArmtotalscore +
   wristhandtotalscore +
   kneetotalscore +
@@ -184,19 +187,19 @@ const totalScore =
   let riskLevel = "";
 let action = "";
 
-if (totalScore >= 0 && totalScore <= 29) {
+if (totalScore >= 0 && totalScore <= 26) {
   riskLevel = "Negligible risk";
   action = "No action required";
-} else if (totalScore >= 30 && totalScore <= 64) {
+} else if (totalScore >= 27 && totalScore <= 57) {
   riskLevel = "Low risk";
   action = "Change may be required";
-} else if (totalScore >= 65 && totalScore <= 124) {
+} else if (totalScore >= 58 && totalScore <= 112) {
   riskLevel = "Medium risk";
   action = "Vigilance, improvements to consider";
-} else if (totalScore >= 125 && totalScore <= 131) {
+} else if (totalScore >= 113 && totalScore <= 139) {
   riskLevel = "High risk";
   action = "Improvements needed";
-} else if (totalScore >= 132 && totalScore <= 190) {
+} else if (totalScore >= 140 && totalScore <= 168) {
   riskLevel = "Very high risk";
   action = "Immediate changes";
 } else {
@@ -205,7 +208,7 @@ if (totalScore >= 0 && totalScore <= 29) {
 }
 
   const handleNext = () => {
-    if (currentCard < 14) setCurrentCard((prev) => prev + 1);
+    if (currentCard < 13) setCurrentCard((prev) => prev + 1);
   };
 
   const handlePrevious = () => {
@@ -216,576 +219,439 @@ if (totalScore >= 0 && totalScore <= 29) {
     <div className="flex flex-col justify-center items-center gap-4 w-full">
       {/* Card 1: Neck */}
       {currentCard === 1 && (
-        <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
-          <CardHeader className="bg-teal-500 text-white rounded-t-lg flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
-            <h4 className="text-md">Body Part: Neck</h4>
-          </CardHeader>
-          <Divider />
-          <CardBody className="bg-white">
-            <h5 className="text-lg text-teal-500 mb-2">1A. Posture</h5>
-            <RadioGroup
-               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const parsedValue = Number(event.target.value); // Ambil value dari target
-                console.log("Parsed value (number):", parsedValue); // Debugging
-                setneckPostureValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-              }}
-              
-              orientation="vertical"
-              style={{ gap: "10px" }}
-            >
-              <Radio value= "0" checked={neckPostureValue === 0}>
-                <div className="flex items-center">
-                  <Image
-                    src="/neck1.png"
-                    alt="Neutral Position"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>{neckPostureValue} is in a neutral position with a slight forward bend                  </span>
-                </div>
-              </Radio>
-              <Radio value="1" checked={neckPostureValue === 1}>
-                <div className="flex items-center">
-                  <Image
-                    src="/neck2.png"
-                    alt="Bent Position"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Neck is moderately bent forward
-                  </span>
-                </div>
-              </Radio>
-              <Radio value="2" checked={neckPostureValue === 2}>
-                <div className="flex items-center">
-                  <Image
-                    src="/neck3.png"
-                    alt="Twisted Position"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Neck is extremely bent forward
-                  </span>
-                </div>
-              </Radio>
-            </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-teal-500 mb-2">1B. Repetition</h5>
-            <RadioGroup
-
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const parsedValue = Number(event.target.value); // Ambil value dari target
-              console.log("Parsed value (number):", parsedValue); // Debugging
-              setneckRepetitionValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-            }}
-              orientation="vertical"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-              <Radio value="0" checked={neckRepetitionValue === 1} color="primary">Movements with occasional pauses</Radio>
-              <Radio value="1" checked={neckRepetitionValue === 2} color="secondary">Movements with frequent pauses</Radio>
-              <Radio value="2" checked={neckRepetitionValue === 3} color="success">Movement with no rest</Radio>
-            </RadioGroup>
-
-            <Spacer y={2} />
-            <h5 className="text-lg text-teal-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
-            <RadioGroup
+       <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
+       <CardHeader className="bg-teal-500 text-white rounded-t-lg flex flex-col items-center">
+         <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
+         <h4 className="text-md">Body Part: Neck</h4>
+       </CardHeader>
+       <Divider />
+       <CardBody className="bg-white">
+         <div className="flex flex-wrap justify-between gap-4">
+           {/* Kolom 1A: Posture */}
+           <div className="flex-1 min-w-[300px]">
+             <h5 className="text-lg text-teal-500 mb-2">1A. Posture</h5>
+             <RadioGroup
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                  const parsedValue = Number(event.target.value); // Ambil value dari target
                  console.log("Parsed value (number):", parsedValue); // Debugging
-                 setNeckmdlValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
+                 setneckPostureValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
                }}
-              orientation="horizontal"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-           <Radio value="0" className="text-blue-500" style={{ borderColor: '#3b82f6' }}>
-    <span className="text-blue-500">😄 No Pain</span>
-  </Radio>
-  <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
-    <span className="text-green-500">🙂 Mild Pain</span>
-  </Radio>
-  <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
-    <span className="text-yellow-500">😐 Moderate Pain</span>
-  </Radio>
-  <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
-    <span className="text-orange-500">😟 Significant Pain</span>
-  </Radio>
-  <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
-    <span className="text-red-500">😡 Severe Pain</span>
-  </Radio>
-            </RadioGroup>
- 
-
-          </CardBody>
-        
-          <Divider />
-          <CardFooter className="bg-teal-500 text-white rounded-b-lg">
-            <div className="flex justify-between w-full">
-                <button
-      className="w-48 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded"
-      onClick={handleNext}
-    >
-      Next
-    </button>
-            </div>
-          </CardFooter>
-        </Card>
+               orientation="vertical"
+               style={{ gap: "10px" }}
+             >
+               <Radio value="0" checked={neckPostureValue === 0}>
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/11.jpg"
+                     alt="Neutral Position"
+                     width={300}
+                     height={100}
+                     className="rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">
+                     is in a neutral position with a slight forward bend
+                   </span>
+                 </div>
+               </Radio>
+               <Radio value="1" checked={neckPostureValue === 1}>
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/12.jpg"
+                     alt="Bent Position"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">
+                     Neck is moderately bent forward
+                   </span>
+                 </div>
+               </Radio>
+               <Radio value="2" checked={neckPostureValue === 2}>
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/13.jpg"
+                     alt="Twisted Position"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">
+                     Neck is extremely bent forward
+                   </span>
+                 </div>
+               </Radio>
+             </RadioGroup>
+           </div>
+     
+           {/* Kolom 1B: Repetition */}
+           <div className="flex-1 min-w-[300px]">
+             <h5 className="text-lg text-teal-500 mb-2">1B. Repetition</h5>
+             <RadioGroup
+               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                 const parsedValue = Number(event.target.value); // Ambil value dari target
+                 console.log("Parsed value (number):", parsedValue); // Debugging
+                 setneckRepetitionValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
+               }}
+               orientation="vertical"
+               style={{
+                 justifyContent: "space-around",
+               }}
+             >
+               <Radio value="0" checked={neckRepetitionValue === 1} color="primary">
+                 Movements with occasional pauses
+               </Radio>
+               <Radio value="1" checked={neckRepetitionValue === 2} color="secondary">
+                 Movements with frequent pauses
+               </Radio>
+               <Radio value="2" checked={neckRepetitionValue === 3} color="success">
+                 Movement with no rest
+               </Radio>
+             </RadioGroup>
+           </div>
+         </div>
+     
+         <Spacer y={2} />
+         <h5 className="text-lg text-teal-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
+         <RadioGroup
+           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+             const parsedValue = Number(event.target.value); // Ambil value dari target
+             console.log("Parsed value (number):", parsedValue); // Debugging
+             setNeckmdlValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
+           }}
+           orientation="vertical"
+           style={{
+             justifyContent: "space-around",
+           }}
+         >
+           <Radio value="0" className="text-blue-500" style={{ borderColor: "#3b82f6" }}>
+             <span className="text-blue-500">😄 No Pain</span>
+           </Radio>
+           <Radio value="1" className="text-green-500" style={{ borderColor: "#10b981" }}>
+             <span className="text-green-500">🙂 Mild Pain</span>
+           </Radio>
+           <Radio value="2" className="text-yellow-500" style={{ borderColor: "#f59e0b" }}>
+             <span className="text-yellow-500">😐 Moderate Pain</span>
+           </Radio>
+           <Radio value="3" className="text-orange-500" style={{ borderColor: "#f97316" }}>
+             <span className="text-orange-500">😟 Significant Pain</span>
+           </Radio>
+           <Radio value="4" className="text-red-500" style={{ borderColor: "#ef4444" }}>
+             <span className="text-red-500">😡 Severe Pain</span>
+           </Radio>
+         </RadioGroup>
+       </CardBody>
+     
+       <Divider />
+       <CardFooter className="bg-teal-500 text-white rounded-b-lg">
+         <div className="flex justify-between w-full">
+           <button
+             className="w-48 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded"
+             onClick={handleNext}
+           >
+             Next
+           </button>
+         </div>
+       </CardFooter>
+     </Card>
+     
       )}
 
       {/* Card 2: Back */}
       {currentCard === 2 && (
-        <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
-          <CardHeader className="bg-purple-500 text-white rounded-t-lg flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
-            <h4 className="text-md">Body Part: Back</h4>
-          </CardHeader>
-          <Divider />
-          <CardBody className="bg-white">
-            <h5 className="text-lg text-purple-500 mb-2">2A. Posture</h5>
-            <RadioGroup
-            
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const parsedValue = Number(event.target.value); // Ambil value dari target
-                console.log("Parsed value (number):", parsedValue); // Debugging
-                setbackPostureValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-              }}
-              orientation="vertical"
-              style={{ gap: "10px" }}
-            >
-              <Radio value="0">
-                <div className="flex items-center">
-                  <Image
-                    src="/back1.png"
-                    alt="Neutral Back"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Back is in a neutral position
-                  </span>
-                </div>
-              </Radio>
-              <Radio value="1">
-                <div className="flex items-center">
-                  <Image
-                    src="back2.png"
-                    alt="Bent Back"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Back is moderate bent up</span>
-                </div>
-              </Radio>
-              <Radio value="2">
-                <div className="flex items-center">
-                  <Image
-                    src="/back3.png"
-                    alt="Twisted Back"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Back is extreme bent up</span>
-                </div>
-              </Radio>
-            </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-purple-500 mb-2">2B. Repetition</h5>
-            <RadioGroup
-              
-
-onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-  const parsedValue = Number(event.target.value); // Ambil value dari target
-  console.log("Parsed value (number):", parsedValue); // Debugging
-  setBackRepetitionValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-}}
-              orientation="vertical"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-              <Radio value="0" color="primary">0 – 5 repetitions per minute</Radio>
-              <Radio value="1" color="secondary">6 – 10 repetitions per minute</Radio>
-              <Radio value="2" color="success">More than 10 repetitions per minute</Radio>
-            </RadioGroup>
- <Spacer y={2} />
-            <h5 className="text-lg text-purple-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
-            <RadioGroup
-             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const parsedValue = Number(event.target.value); // Ambil value dari target
-              console.log("Parsed value (number):", parsedValue); // Debugging
-              setBackmdlValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-            }}
-              orientation="horizontal"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
+       <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
+       <CardHeader className="bg-purple-500 text-white rounded-t-lg flex flex-col items-center">
+         <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
+         <h4 className="text-md">Body Part: Back</h4>
+       </CardHeader>
+       <Divider />
+     
+       <CardBody className="bg-white">
+         <div className="flex flex-wrap justify-between gap-4">
+           {/* Kolom 2A: Posture */}
+           <div className="flex-1 min-w-[300px]">
+             <h5 className="text-lg text-purple-500 mb-2">2A. Posture</h5>
+             <RadioGroup
+               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                 const parsedValue = Number(event.target.value);
+                 console.log("Parsed value (number):", parsedValue);
+                 setbackPostureValue(isNaN(parsedValue) ? 0 : parsedValue);
+               }}
+               orientation="vertical"
+               style={{ gap: "10px" }}
+             >
+               <Radio value="0">
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/21.jpg"
+                     alt="Neutral Back"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">Back is in a neutral position</span>
+                 </div>
+               </Radio>
+               <Radio value="1">
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="22.jpg"
+                     alt="Bent Back"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">Back is moderate bent up</span>
+                 </div>
+               </Radio>
+               <Radio value="2">
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/23.jpg"
+                     alt="Twisted Back"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">Back is extreme bent up</span>
+                 </div>
+               </Radio>
+             </RadioGroup>
+           </div>
+     
+           {/* Kolom 2B: Repetition */}
+           <div className="flex-1 min-w-[300px]">
+             <h5 className="text-lg text-purple-500 mb-2">2B. Repetition</h5>
+             <RadioGroup
+               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                 const parsedValue = Number(event.target.value);
+                 console.log("Parsed value (number):", parsedValue);
+                 setBackRepetitionValue(isNaN(parsedValue) ? 0 : parsedValue);
+               }}
+               orientation="vertical"
+               style={{ justifyContent: "space-around" }}
+             >
+               <Radio value="0" color="primary">0 – 5 repetitions per minute</Radio>
+               <Radio value="1" color="secondary">6 – 10 repetitions per minute</Radio>
+               <Radio value="2" color="success">More than 10 repetitions per minute</Radio>
+             </RadioGroup>
+           </div>
+         </div>
+     
+         <Spacer y={2} />
+     
+         {/* MDL Section */}
+         <h5 className="text-lg text-purple-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
+         <RadioGroup
+           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+             const parsedValue = Number(event.target.value);
+             console.log("Parsed value (number):", parsedValue);
+             setBackmdlValue(isNaN(parsedValue) ? 0 : parsedValue);
+           }}
+           orientation="vertical"
+           style={{ justifyContent: "space-around" }}
+         >
            <Radio value="0" className="text-blue-500" style={{ borderColor: '#3b82f6' }}>
-    <span className="text-blue-500">😄 No Pain</span>
-  </Radio>
-  <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
-    <span className="text-green-500">🙂 Mild Pain</span>
-  </Radio>
-  <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
-    <span className="text-yellow-500">😐 Moderate Pain</span>
-  </Radio>
-  <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
-    <span className="text-orange-500">😟 Significant Pain</span>
-  </Radio>
-  <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
-    <span className="text-red-500">😡 Severe Pain</span>
-  </Radio>
-            </RadioGroup>
-          </CardBody>
-          <Divider />
-          <CardFooter className="bg-purple-500 text-white rounded-b-lg">
-            <div className="flex justify-between w-full">
-               <button
-      className="w-48 bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded"
-      onClick={handlePrevious}
-    >
-      Previous
-    </button>
-    <button
-      className="w-48 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded"
-      onClick={handleNext}
-    >
-      Next
-    </button>
-            </div>
-          </CardFooter>
-        </Card>
+             <span className="text-blue-500">😄 No Pain</span>
+           </Radio>
+           <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
+             <span className="text-green-500">🙂 Mild Pain</span>
+           </Radio>
+           <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
+             <span className="text-yellow-500">😐 Moderate Pain</span>
+           </Radio>
+           <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
+             <span className="text-orange-500">😟 Significant Pain</span>
+           </Radio>
+           <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
+             <span className="text-red-500">😡 Severe Pain</span>
+           </Radio>
+         </RadioGroup>
+       </CardBody>
+       <Divider />
+       <CardFooter className="bg-purple-500 text-white rounded-b-lg">
+         <div className="flex justify-between w-full">
+           <button
+             className="w-48 bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded"
+             onClick={handlePrevious}
+           >
+             Previous
+           </button>
+           <button
+             className="w-48 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded"
+             onClick={handleNext}
+           >
+             Next
+           </button>
+         </div>
+       </CardFooter>
+     </Card>
+     
       )}
 
       {/* Card 3: Shoulder */}
       {currentCard === 3 && (
-        <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
-          <CardHeader className="bg-green-500 text-white rounded-t-lg flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
-            <h4 className="text-md">Body Part: Shoulder</h4>
-          </CardHeader>
-          <Divider />
-          <CardBody className="bg-white">
-            <h5 className="text-lg text-green-500 mb-2">3A. Posture</h5>
-            <RadioGroup
- onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-  const parsedValue = Number(event.target.value); // Ambil value dari target
-  console.log("Parsed value (number):", parsedValue); // Debugging
-  setShoulderPostureValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-}}
-              orientation="vertical"
-              style={{ gap: "10px" }}
-            >
-              <Radio value="0">
-                <div className="flex items-center">
-                  <Image
-                    src="/31.png"
-                    alt="Neutral Shoulder"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Shoulder is in a neutral position
-                  .</span>
-                </div>
-              </Radio>
-              <Radio value="2">
-                <div className="flex items-center">
-                  <Image
-                    src="/32.png"
-                    alt="Raised Shoulder"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Shoulder is moderate bent up
-                  </span>
-                </div>
-              </Radio>
-              <Radio value="4">
-                <div className="flex items-center">
-                  <Image
-                    src="/33.png"
-                    alt="Twisted Shoulder"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Shoulder is extreme bent up
-                  </span>
-                </div>
-              </Radio>
-            </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-green-500 mb-2">3B. Repetition</h5>
-            <RadioGroup
-              
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const parsedValue = Number(event.target.value); // Ambil value dari target
-                console.log("Parsed value (number):", parsedValue); // Debugging
-                setShoulderRepetitionValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-              }}
-              orientation="vertical"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-              <Radio value="0" color="primary">Movements with occasional pauses</Radio>
-              <Radio value="1" color="secondary">Movement with more pauses</Radio>
-              <Radio value="2" color="success">Continuous movement with no rest</Radio>
-            </RadioGroup>
- <Spacer y={2} />
-            <h5 className="text-lg text-green-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
-            <h6 className="text-lg text-green-500 mb-2">Left</h6>
-           
-            <RadioGroup
-             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const parsedValue = Number(event.target.value); // Ambil value dari target
-              console.log("Parsed value (number):", parsedValue); // Debugging
-              setShouldermdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-            }}
-              orientation="horizontal"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-           <Radio value="0" className="text-blue-500" style={{ borderColor: '#3b82f6' }}>
-    <span className="text-blue-500">😄 No Pain</span>
-  </Radio>
-  <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
-    <span className="text-green-500">🙂 Mild Pain</span>
-  </Radio>
-  <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
-    <span className="text-yellow-500">😐 Moderate Pain</span>
-  </Radio>
-  <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
-    <span className="text-orange-500">😟 Significant Pain</span>
-  </Radio>
-  <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
-    <span className="text-red-500">😡 Severe Pain</span>
-  </Radio>
-            </RadioGroup>
-
-            <h6 className="text-lg text-green-500 mb-2">Right</h6>
-           
-            <RadioGroup
-             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const parsedValue = Number(event.target.value); // Ambil value dari target
-              console.log("Parsed value (number):", parsedValue); // Debugging
-              setShouldermdlRightValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-            }}
-              orientation="horizontal"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-           <Radio value="0" className="text-blue-500" style={{ borderColor: '#3b82f6' }}>
-    <span className="text-blue-500">😄 No Pain</span>
-  </Radio>
-  <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
-    <span className="text-green-500">🙂 Mild Pain</span>
-  </Radio>
-  <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
-    <span className="text-yellow-500">😐 Moderate Pain</span>
-  </Radio>
-  <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
-    <span className="text-orange-500">😟 Significant Pain</span>
-  </Radio>
-  <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
-    <span className="text-red-500">😡 Severe Pain</span>
-  </Radio>
-            </RadioGroup>
-          </CardBody>
-          <Divider />
-          <CardFooter className="bg-green-500 text-white rounded-b-lg">
-            <div className="flex justify-between w-full">
-              <button
-      className="w-48 bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded"
-      onClick={handlePrevious}
-    >
-      Previous
-    </button>
-                <button
-      className="w-48 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded"
-      onClick={handleNext}
-    >
-      Next
-    </button>
-            </div>
-          </CardFooter>
-        </Card>
-      )}
-
-            {/* Card 4: Shoulder */}
-            {currentCard === 4 && (
-        <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
-          <CardHeader className="bg-blue-500 text-white rounded-t-lg flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
-            <h4 className="text-md">Body Part: Upper Arm</h4>
-          </CardHeader>
-          <Divider />
-          <CardBody className="bg-white">
-            <h5 className="text-lg text-blue-500 mb-2">4A. Posture</h5>
-            <RadioGroup
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const parsedValue = Number(event.target.value); // Ambil value dari target
-              console.log("Parsed value (number):", parsedValue); // Debugging
-              setUpperArmPostureValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-            }}
-              orientation="vertical"
-              style={{ gap: "10px" }}
-            >
-              <Radio value="0">
-                <div className="flex items-center">
-                  <Image
-                    src="/41.png"
-                    alt="Neutral Shoulder"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Upper Arm is in a neutral position
-                  </span>
-                </div>
-              </Radio>
-              <Radio value="2">
-                <div className="flex items-center">
-                  <Image
-                    src="/42.png"
-                    alt="Raised Shoulder"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Upper Arm is moderately bent up
-                  .</span>
-                </div>
-              </Radio>
-              <Radio value="4">
-                <div className="flex items-center">
-                  <Image
-                    src="/43.png"
-                    alt="Twisted Shoulder"
-                    width={100}
-                    height={100}
-                    className="mr-2 rounded-lg"
-                  />
-                  <span>Upper Arm is extreme bent up
-                  </span>
-                </div>
-              </Radio>
-            </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-blue-500 mb-2">4B. Repetition</h5>
-            <RadioGroup
-              
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const parsedValue = Number(event.target.value); // Ambil value dari target
-                console.log("Parsed value (number):", parsedValue); // Debugging
-                setUpperArmRepetitionValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-              }}
-              orientation="vertical"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-              <Radio value="0" color="primary">Movements with occasional pauses</Radio>
-              <Radio value="1" color="secondary">Movements with frequent pauses</Radio>
-              <Radio value="2" color="success">Continuous movement with no rest</Radio>
-            </RadioGroup>
- <Spacer y={2} />
-            <h5 className="text-lg text-blue-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
-            <h6 className="text-lg text-blue-500 mb-2">Left</h6>
-            <RadioGroup
-             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const parsedValue = Number(event.target.value); // Ambil value dari target
-              console.log("Parsed value (number):", parsedValue); // Debugging
-              setUpperArmmdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-            }}
-              orientation="horizontal"
-              style={{
-                justifyContent: "space-around",
-              }}
-            >
-           <Radio value="0" className="text-blue-500" style={{ borderColor: '#3b82f6' }}>
-    <span className="text-blue-500">😄 No Pain</span>
-  </Radio>
-  <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
-    <span className="text-green-500">🙂 Mild Pain</span>
-  </Radio>
-  <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
-    <span className="text-yellow-500">😐 Moderate Pain</span>
-  </Radio>
-  <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
-    <span className="text-orange-500">😟 Significant Pain</span>
-  </Radio>
-  <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
-    <span className="text-red-500">😡 Severe Pain</span>
-  </Radio>
-            </RadioGroup>
-
-            <h6 className="text-lg text-blue-500 mb-2">Right</h6>
-           
-           <RadioGroup
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              const parsedValue = Number(event.target.value); // Ambil value dari target
-              console.log("Parsed value (number):", parsedValue); // Debugging
-              setUpperArmmdlRightValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-            }}
-             orientation="horizontal"
-             style={{
-               justifyContent: "space-around",
-             }}
-           >
+       <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
+       <CardHeader className="bg-green-500 text-white rounded-t-lg flex flex-col items-center">
+         <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
+         <h4 className="text-md">Body Part: Shoulder</h4>
+       </CardHeader>
+       <Divider />
+       <CardBody className="bg-white">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div>
+             <h5 className="text-lg text-green-500 mb-2">3A. Posture</h5>
+             <RadioGroup
+               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                 const parsedValue = Number(event.target.value);
+                 console.log("Parsed value (number):", parsedValue);
+                 setShoulderPostureValue(isNaN(parsedValue) ? 0 : parsedValue);
+               }}
+               orientation="vertical"
+               style={{ gap: "10px" }}
+             >
+               <Radio value="0">
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/31.jpg"
+                     alt="Neutral Shoulder"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">Shoulder is in a neutral position.</span>
+                 </div>
+               </Radio>
+               <Radio value="2">
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/32.jpg"
+                     alt="Raised Shoulder"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">Shoulder is moderate bent up.</span>
+                 </div>
+               </Radio>
+               <Radio value="4">
+                 <div className="flex flex-col items-center">
+                   <Image
+                     src="/33.jpg"
+                     alt="Twisted Shoulder"
+                     width={300}
+                     height={100}
+                     className="mr-2 rounded-lg"
+                   />
+                   <span className="text-center max-w-[300px]">Shoulder is extreme bent up.</span>
+                 </div>
+               </Radio>
+             </RadioGroup>
+           </div>
+     
+           <div>
+             <h5 className="text-lg text-green-500 mb-2">3B. Repetition</h5>
+             <RadioGroup
+               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                 const parsedValue = Number(event.target.value);
+                 console.log("Parsed value (number):", parsedValue);
+                 setShoulderRepetitionValue(isNaN(parsedValue) ? 0 : parsedValue);
+               }}
+               orientation="vertical"
+               style={{ justifyContent: "space-around" }}
+             >
+               <Radio value="0" color="primary">Movements with occasional pauses</Radio>
+               <Radio value="1" color="secondary">Movement with more pauses</Radio>
+               <Radio value="2" color="success">Continuous movement with no rest</Radio>
+             </RadioGroup>
+           </div>
+           </div>
+     
+           <h5 className="text-lg text-green-500 mb-2">Muskuloskeletal Discomfort Level (MDL)</h5>
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <h6 className="text-lg text-green-500 mb-2">Left</h6>
+        <RadioGroup
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            const parsedValue = Number(event.target.value);
+            console.log("Parsed value (number):", parsedValue);
+            setShouldermdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue);
+          }}
+          orientation="vertical"
+          style={{ justifyContent: "space-around" }}
+        >
           <Radio value="0" className="text-blue-500" style={{ borderColor: '#3b82f6' }}>
-   <span className="text-blue-500">😄 No Pain</span>
- </Radio>
- <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
-   <span className="text-green-500">🙂 Mild Pain</span>
- </Radio>
- <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
-   <span className="text-yellow-500">😐 Moderate Pain</span>
- </Radio>
- <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
-   <span className="text-orange-500">😟 Significant Pain</span>
- </Radio>
- <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
-   <span className="text-red-500">😡 Severe Pain</span>
- </Radio>
-           </RadioGroup>
-
-          </CardBody>
-          <Divider />
-          <CardFooter className="bg-blue-500 text-white rounded-b-lg">
-            <div className="flex justify-between w-full">
-              <button
-      className="w-48 bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded"
-      onClick={handlePrevious}
-    >
-      Previous
-    </button>
-                <button
-      className="w-48 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded"
-      onClick={handleNext}
-    >
-      Next
-    </button>
-            </div>
-          </CardFooter>
-        </Card>
+            <span className="text-blue-500">😄 No Pain</span>
+          </Radio>
+          <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
+            <span className="text-green-500">🙂 Mild Pain</span>
+          </Radio>
+          <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
+            <span className="text-yellow-500">😐 Moderate Pain</span>
+          </Radio>
+          <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
+            <span className="text-orange-500">😟 Significant Pain</span>
+          </Radio>
+          <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
+            <span className="text-red-500">😡 Severe Pain</span>
+          </Radio>
+        </RadioGroup>
+      </div>
+      <div>
+        <h6 className="text-lg text-green-500 mb-2">Right</h6>
+        <RadioGroup
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            const parsedValue = Number(event.target.value);
+            console.log("Parsed value (number):", parsedValue);
+            setShouldermdlRightValue(isNaN(parsedValue) ? 0 : parsedValue);
+          }}
+          orientation="vertical"
+          style={{ justifyContent: "space-around" }}
+        >
+          <Radio value="0" className="text-blue-500" style={{ borderColor: '#3b82f6' }}>
+            <span className="text-blue-500">😄 No Pain</span>
+          </Radio>
+          <Radio value="1" className="text-green-500" style={{ borderColor: '#10b981' }}>
+            <span className="text-green-500">🙂 Mild Pain</span>
+          </Radio>
+          <Radio value="2" className="text-yellow-500" style={{ borderColor: '#f59e0b' }}>
+            <span className="text-yellow-500">😐 Moderate Pain</span>
+          </Radio>
+          <Radio value="3" className="text-orange-500" style={{ borderColor: '#f97316' }}>
+            <span className="text-orange-500">😟 Significant Pain</span>
+          </Radio>
+          <Radio value="4" className="text-red-500" style={{ borderColor: '#ef4444' }}>
+            <span className="text-red-500">😡 Severe Pain</span>
+          </Radio>
+        </RadioGroup>
+      </div>
+      </div>
+       </CardBody>
+       <Divider />
+       <CardFooter className="bg-green-500 text-white rounded-b-lg">
+         <div className="flex justify-between w-full">
+           <button
+             className="w-48 bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded"
+             onClick={handlePrevious}
+           >
+             Previous
+           </button>
+           <button
+             className="w-48 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded"
+             onClick={handleNext}
+           >
+             Next
+           </button>
+         </div>
+       </CardFooter>
+     </Card>
+     
       )}
+
+         
 
          {/* Card 5: lower arm */}
-         {currentCard === 5 && (
+         {currentCard === 4 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-red-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -793,7 +659,9 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           </CardHeader>
           <Divider />
           <CardBody className="bg-white">
-            <h5 className="text-lg text-red-500 mb-2">5A. Posture</h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h5 className="text-lg text-red-500 mb-2">4A. Posture</h5>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -804,48 +672,51 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/51.png"
+                    src="/41.jpg"
                     alt="Neutral Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Lower Arm is in a neutral position
+                <span className="text-center max-w-[300px]">Lower Arm is in a neutral position
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/52.png"
+                    src="/42.jpg"
                     alt="Raised Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Lower Arm is moderately bent up
+                <span className="text-center max-w-[300px]">Lower Arm is moderately bent up
 
                   .</span>
                 </div>
               </Radio>
               <Radio value="4">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/53.png"
+                    src="/43.jpg"
                     alt="Twisted Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Lower arm is positioned across the midline or extended to the side of the body
+                <span className="text-center max-w-[300px]">Lower arm is positioned across the midline or extended to the side of the body
                   </span>
                 </div>
               </Radio>
             </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-red-500 mb-2">5B. Repetition</h5>
+
+             </div>
+     
+           <div>
+            <h5 className="text-lg text-red-500 mb-2">4B. Repetition</h5>
             <RadioGroup
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -862,8 +733,12 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               <Radio value="1" color="secondary">Movements with frequent pauses</Radio>
               <Radio value="2" color="success">Continuous movement with no rest</Radio>
             </RadioGroup>
- <Spacer y={2} />
+            </div>
+            </div>
+
             <h5 className="text-lg text-red-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
+            <div className="grid grid-cols-2 gap-4">
+            <div>
             <h6 className="text-lg text-red-500 mb-2">Left</h6>
            
             <RadioGroup
@@ -872,7 +747,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setLowerArmmdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -893,6 +768,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
+            </div>
+            <div>
             <h6 className="text-lg text-red-500 mb-2">Right</h6>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -900,7 +777,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setLowerArmmdlRightValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -921,6 +798,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
+            </div>
+            </div>
           </CardBody>
           <Divider />
           <CardFooter className="bg-red-500 text-white rounded-b-lg">
@@ -942,8 +821,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         </Card>
       )}
 
-         {/* Card 6: Wirst */}
-         {currentCard === 6 && (
+         {/* Card 5: Wirst */}
+         {currentCard === 5 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-amber-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -951,7 +830,9 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           </CardHeader>
           <Divider />
           <CardBody className="bg-white">
-            <h5 className="text-lg text-amber-500 mb-2">6A. Posture</h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h5 className="text-lg text-amber-500 mb-2">5A. Posture</h5>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -963,49 +844,50 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/61.png"
+                    src="/51.jpg"
                     alt="Neutral Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Wrist are in a neutral position
+                <span className="text-center max-w-[300px]">Wrist are in a neutral position
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/62.png"
+                    src="/52.jpg"
                     alt="Raised Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Wrists are moderately bent upward or downward
+                <span className="text-center max-w-[300px]">Wrists are moderately bent upward or downward
 
 
                   .</span>
                 </div>
               </Radio>
               <Radio value="4">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/63.png"
+                    src="/53.jpg"
                     alt="Twisted Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Wrists are extremely bent upward or downward with twisting
+                <span className="text-center max-w-[300px]">Wrists are extremely bent upward or downward with twisting
                   </span>
                 </div>
               </Radio>
             </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-amber-500 mb-2">6B. Repetition</h5>
+           </div>
+           <div>
+            <h5 className="text-lg text-amber-500 mb-2">5B. Repetition</h5>
             <RadioGroup
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -1022,8 +904,12 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               <Radio value="1" color="secondary">11 – 20 repetitions per minute</Radio>
               <Radio value="2" color="success">More than 20 repetitions per minute</Radio>
             </RadioGroup>
- <Spacer y={2} />
+            </div>
+            </div>
+
             <h5 className="text-lg text-amber-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
+            <div className="grid grid-cols-2 gap-4">
+            <div>
             <h6 className="text-lg text-amber-500 mb-2">Left</h6>
            
             <RadioGroup
@@ -1032,7 +918,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setWristmdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -1053,7 +939,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
-
+            </div>
+            <div>
             <h6 className="text-lg text-amber-500 mb-2">Right</h6>
            
            <RadioGroup
@@ -1062,7 +949,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setWristmdlRightValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-             orientation="horizontal"
+             orientation="vertical"
              style={{
                justifyContent: "space-around",
              }}
@@ -1083,6 +970,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
    <span className="text-red-500">😡 Severe Pain</span>
  </Radio>
            </RadioGroup>
+           </div>
+           </div>
           </CardBody>
           <Divider />
           <CardFooter className="bg-amber-500 text-white rounded-b-lg">
@@ -1104,8 +993,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         </Card>
       )}
 
- {/* Card 7: Knee */}
- {currentCard === 7 && (
+ {/* Card 6: Knee */}
+ {currentCard === 6 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-fuchsia-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -1113,7 +1002,9 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           </CardHeader>
           <Divider />
           <CardBody className="bg-white">
-            <h5 className="text-lg text-fuchsia-500 mb-2">7A. Posture</h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h5 className="text-lg text-fuchsia-500 mb-2">6A. Posture</h5>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -1125,46 +1016,47 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/71.png"
+                    src="/61.jpg"
                     alt="Neutral Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Knee is in a neutral position
+                <span className="text-center max-w-[300px]">Knee is in a neutral position
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/72.png"
+                    src="/62.jpg"
                     alt="Raised Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Knee is in squatting position</span>
+                <span className="text-center max-w-[300px]">Knee is in squatting position</span>
                 </div>
               </Radio>
               <Radio value="4">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/73.png"
+                    src="/63.jpg"
                     alt="Twisted Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Knee is in kneeling  position
+                <span className="text-center max-w-[300px]">Knee is in kneeling  position
                   </span>
                 </div>
               </Radio>
             </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-fuchsia-500 mb-2">7B. Repetition</h5>
+            </div>
+            <div>
+            <h5 className="text-lg text-fuchsia-500 mb-2">6B. Repetition</h5>
             <RadioGroup
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -1181,8 +1073,11 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               <Radio value="1" color="secondary">11 – 20 repetitions per minute</Radio>
               <Radio value="2" color="success">More than 20 repetitions per minute</Radio>
             </RadioGroup>
- <Spacer y={2} />
+              </div>
+              </div>
             <h5 className="text-lg text-fuchsia-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
+            <div className="grid grid-cols-2 gap-4">
+            <div>
             <h6 className="text-lg text-fuchsia-500 mb-2">Left</h6>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1190,7 +1085,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setKneemdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -1211,7 +1106,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
-
+            </div>
+            <div>
             <h6 className="text-lg text-fuchsia-500 mb-2">Right</h6>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1219,7 +1115,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setKneemdlRightValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -1240,6 +1136,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
+            </div>
+            </div>
           </CardBody>
           <Divider />
           <CardFooter className="bg-fuchsia-500 text-white rounded-b-lg">
@@ -1261,8 +1159,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         </Card>
       )}
 
-{/* Card 8: Leg */}
-{currentCard === 8 && (
+{/* Card 7: Leg */}
+{currentCard === 7 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-rose-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -1270,7 +1168,9 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           </CardHeader>
           <Divider />
           <CardBody className="bg-white">
-            <h5 className="text-lg text-rose-500 mb-2">8A. Posture</h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h5 className="text-lg text-rose-500 mb-2">7A. Posture</h5>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -1282,47 +1182,48 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/81.png"
+                    src="/71.jpg"
                     alt="Neutral Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Leg are  in a neutral position
+                <span className="text-center max-w-[300px]">Leg are  in a neutral position
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/82.png"
+                    src="/72.jpg"
                     alt="Raised Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Leg are moderately bent forward
+                <span className="text-center max-w-[300px]">Leg are moderately bent forward
                   </span>
                 </div>
               </Radio>
               <Radio value="4">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/83.png"
+                    src="/73.jpg"
                     alt="Twisted Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Leg are extremely bent forward
+                <span className="text-center max-w-[300px]">Leg are extremely bent forward
                   </span>
                 </div>
               </Radio>
             </RadioGroup>
-            <Spacer y={2} />
-            <h5 className="text-lg text-rose-500 mb-2">8B. Repetition</h5>
+            </div>
+            <div>
+            <h5 className="text-lg text-rose-500 mb-2">7B. Repetition</h5>
             <RadioGroup
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const parsedValue = Number(event.target.value); // Ambil value dari target
@@ -1339,8 +1240,11 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               <Radio value="1" color="secondary">11 – 20 repetitions per minute</Radio>
               <Radio value="2" color="success">More than 20 repetitions per minute</Radio>
             </RadioGroup>
- <Spacer y={2} />
+              </div>
+              </div>
             <h5 className="text-lg text-rose-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
+            <div className="grid grid-cols-2 gap-4">
+            <div>
             <h6 className="text-lg text-rose-500 mb-2">Left</h6>
             <RadioGroup
              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1348,7 +1252,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setLegmdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -1369,6 +1273,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
+            </div>
+            <div>
 
             <h6 className="text-lg text-rose-500 mb-2">Right</h6>
             <RadioGroup
@@ -1377,7 +1283,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setLegmdlRightValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -1398,6 +1304,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
+            </div>
+            </div>
           </CardBody>
           <Divider />
           <CardFooter className="bg-rose-500 text-white rounded-b-lg">
@@ -1420,8 +1328,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
       )}
 
 
-{/* Card 9: Hand Grip */}
-{currentCard === 9 && (
+{/* Card 8: Hand Grip */}
+{currentCard === 8 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-indigo-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -1429,6 +1337,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           </CardHeader>
           <Divider />
           <CardBody className="bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
             <h5 className="text-lg text-indigo-500 mb-2">Posture</h5>
             <RadioGroup
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1440,46 +1350,47 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/91.png"
+                    src="/81.jpg"
                     alt="Neutral Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Power grip for pulling or comfortable full-hand contact for pushing
+                <span className="text-center max-w-[300px]">Power grip for pulling or comfortable full-hand contact for pushing
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/92.png"
+                    src="/82.jpg"
                     alt="Raised Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>Partial grip, eg. Finger clamped at 90 degress, or partial hand contact for pushing
+                <span className="text-center max-w-[300px]">Partial grip, eg. Finger clamped at 90 degress, or partial hand contact for pushing
                   </span>
                 </div>
               </Radio>
               <Radio value="4">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/93.png"
+                    src="/83.jpg"
                     alt="Twisted Shoulder"
-                    width={100}
+                    width={300}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>No handles or the hand contact is uncomfortable
+                <span className="text-center max-w-[300px]">No handles or the hand contact is uncomfortable
                   </span>
                 </div>
               </Radio>
             </RadioGroup>
-            <Spacer y={2} />
+            </div>
+            <div>
             <h5 className="text-lg text-indigo-500 mb-2">Muskuloskelatal Discomfoty Level (MDL)</h5>
             <h6 className="text-lg text-indigo-500 mb-2">Left</h6>
             <RadioGroup
@@ -1488,7 +1399,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setHandGripsmdlLeftValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -1517,7 +1428,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               console.log("Parsed value (number):", parsedValue); // Debugging
               setHandGripsmdlRightValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
             }}
-              orientation="horizontal"
+              orientation="vertical"
               style={{
                 justifyContent: "space-around",
               }}
@@ -1538,7 +1449,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
     <span className="text-red-500">😡 Severe Pain</span>
   </Radio>
             </RadioGroup>
-            <Spacer y={2} />
+          </div>
+          </div>
            
           </CardBody>
           <Divider />
@@ -1562,8 +1474,8 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
       )}
 
       
-{/* Card 10: Hand Grip */}
-{currentCard === 10 && (
+{/* Card 9: Hand Grip */}
+{currentCard === 9 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-emerald-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -1582,43 +1494,43 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/101.png"
+                    src="/91.jpeg"
                     alt="Neutral Shoulder"
                     width={100}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span> Less than 2 hours / day
+                <span className="text-center max-w-[300px]"> Less than 2 hours / day
 
                   </span>
                 </div>
               </Radio>
               <Radio value="1">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/102.png"
+                    src="/92.jpeg"
                     alt="Raised Shoulder"
                     width={100}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>2 until 4 hours / day
+                <span className="text-center max-w-[300px]">2 until 4 hours / day
 
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <Image
-                    src="/103.png"
+                    src="/93.jpeg"
                     alt="Twisted Shoulder"
                     width={100}
                     height={100}
                     className="mr-2 rounded-lg"
                   />
-                  <span>More than 4 hours / day
+                <span className="text-center max-w-[300px]">More than 4 hours / day
                   </span>
                 </div>
               </Radio>
@@ -1648,55 +1560,121 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 
            
       {/* Card 11: Load */}
-{currentCard === 11 && (
-        <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
-          <CardHeader className="bg-gray-500 text-white rounded-t-lg flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
-            <h4 className="text-md">Body Part: Load</h4>
-          </CardHeader>
-          <Divider />
-          <CardBody className="bg-white">
-            <h5 className="text-lg text-gray-500 mb-2">Load</h5>
-            <RadioGroup
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const parsedValue = Number(event.target.value); // Ambil value dari target
-                console.log("Parsed value (number):", parsedValue); // Debugging
-                setLoadValue(isNaN(parsedValue) ? 0 : parsedValue); // Pastikan parsedValue bukan NaN
-              }}
-
-              orientation="vertical"
-              style={{ gap: "10px" }}
-            >
-              <Radio value="0">
-                <div className="flex items-center">
-                  
-                  <span> 5 Kg or less, lifted up to 10 times / hour
-
-                  </span>
-                </div>
-              </Radio>
-              <Radio value="1">
-                <div className="flex items-center">
-                  
-                  <span>5 – 10 kg, lifted 11 – 20 times/hour
-
-                  </span>
-                </div>
-              </Radio>
-              <Radio value="2">
-                <div className="flex items-center">
-                
-                  <span>more than 10 kilograms and performing this action more than 20 times per hour
-                  </span>
-                </div>
-              </Radio>
-            </RadioGroup>
-            <Spacer y={2} />
-           
-          </CardBody>
-          <Divider />
-          <CardFooter className="bg-gray-500 text-white rounded-b-lg">
-            <div className="flex justify-between w-full">
+{currentCard === 10 && (
+           <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
+           <CardHeader className="bg-gray-500 text-white rounded-t-lg flex flex-col items-center">
+             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
+             <h4 className="text-md">Body Part: Load</h4>
+           </CardHeader>
+           <Divider />
+           <CardBody className="bg-white">
+             <h5 className="text-lg text-gray-500 mb-4">Select Gender</h5>
+             <RadioGroup
+               onChange={handleGenderChange}
+               orientation="horizontal"
+               value={gender} // Bind to state
+               style={{ gap: "10px" }}
+             >
+               <Radio value="male">Male</Radio>
+               <Radio value="female">Female</Radio>
+             </RadioGroup>
+     
+             <Spacer y={2} />
+     
+             <h5 className="text-lg text-gray-500 mb-2">Load</h5>
+             <RadioGroup
+               onChange={(event) => {
+                 const parsedValue = Number(event.target.value);
+                 setLoadValue(isNaN(parsedValue) ? 0 : parsedValue);
+               }}
+               orientation="vertical"
+               style={{ gap: "10px" }}
+             >
+               {gender === "male" ? (
+                 <>
+                   <Radio value="0">
+                     <div className="flex flex-col items-center">
+                       <Image
+                         src="/10_load male1.jpeg"
+                         alt="Male 0-5 Kg"
+                         width={100}
+                         height={100}
+                         className="mr-2 rounded-lg"
+                       />
+                       <span>0-5 Kg</span>
+                     </div>
+                   </Radio>
+                   <Radio value="1">
+                     <div className="flex flex-col items-center">
+                       <Image
+                         src="/10_load male2.jpeg"
+                         alt="Male 5-15 Kg"
+                         width={100}
+                         height={100}
+                         className="mr-2 rounded-lg"
+                       />
+                       <span>5-15 Kg</span>
+                     </div>
+                   </Radio>
+                   <Radio value="2">
+                     <div className="flex flex-col items-center">
+                       <Image
+                         src="/10_load male3.jpeg"
+                         alt=">15 Kg"
+                         width={100}
+                         height={100}
+                         className="mr-2 rounded-lg"
+                       />
+                       <span>more than 15 Kg</span>
+                     </div>
+                   </Radio>
+                 </>
+               ) : (
+                 <>
+                   <Radio value="0">
+                     <div className="flex flex-col items-center">
+                       <Image
+                         src="/10_load female1.jpeg"
+                         alt="Female 0-3 Kg"
+                         width={100}
+                         height={100}
+                         className="mr-2 rounded-lg"
+                       />
+                       <span>0-3 Kg</span>
+                     </div>
+                   </Radio>
+                   <Radio value="1">
+                     <div className="flex flex-col items-center">
+                       <Image
+                         src="/10_load female2.jpeg"
+                         alt="Female 3-10 Kg"
+                         width={100}
+                         height={100}
+                         className="mr-2 rounded-lg"
+                       />
+                       <span>3-10 Kg</span>
+                     </div>
+                   </Radio>
+                   <Radio value="2">
+                     <div className="flex flex-col items-center">
+                       <Image
+                         src="/10_load female3.jpeg"
+                         alt=">10 Kg"
+                         width={100}
+                         height={100}
+                         className="mr-2 rounded-lg"
+                       />
+                       <span>more than 10 Kg</span>
+                     </div>
+                   </Radio>
+                 </>
+               )}
+             </RadioGroup>
+             <Spacer y={2} />
+           </CardBody>
+           <Divider />
+           <CardFooter className="bg-gray-500 text-white rounded-b-lg">
+           <div className="flex justify-between w-full">
               <button
       className="w-48 bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded"
       onClick={handlePrevious}
@@ -1710,12 +1688,12 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
       Next
     </button>
             </div>
-          </CardFooter>
-        </Card>
+           </CardFooter>
+         </Card>
       )}
 
-       {/* Card 12: Hand Grip */}
-{currentCard === 12 && (
+       {/* Card 11: Hand Grip */}
+{currentCard === 11 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-lime-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -1735,20 +1713,20 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>Minimal physical, mental, or emotional effort needed
                   </span>
                 </div>
               </Radio>
               <Radio value="1">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>Manageable levels of physical, mental, or emotional effort required
 
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>Significant physical, mental, or emotional effort required
                   </span>
                 </div>
@@ -1778,7 +1756,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
       )}
 
        {/* Card 13: Hand Grip */}
-{currentCard === 13 && (
+{currentCard === 12 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-pink-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -1798,20 +1776,20 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>Strong sense of fulfillment and value in work
                   </span>
                 </div>
               </Radio>
               <Radio value="1">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>General contentment with job duties but some areas for improvement
 
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>Feelings of frustration or dissatisfaction with work
                   </span>
                 </div>
@@ -1841,7 +1819,7 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
       )}
 
        {/* Card 16: Hand Grip */}
-{currentCard === 14 && (
+{currentCard === 13 && (
         <Card className="max-w-[800px] w-full shadow-xl rounded-lg">
           <CardHeader className="bg-orange-500 text-white rounded-t-lg flex flex-col items-center">
             <h3 className="text-xl font-bold mb-4">Ergonomic Risk Assessment</h3>
@@ -1861,20 +1839,20 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               style={{ gap: "10px" }}
             >
               <Radio value="0">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>strong support from supervisors and colleagues, open communication channels, access to training and resources, and mentorship programs and teamwork being encouraged.
                   </span>
                 </div>
               </Radio>
               <Radio value="1">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>Some support is available from supervisors and peers, with occasional communication and feedback, but there is limited access to training resources.
 
                   </span>
                 </div>
               </Radio>
               <Radio value="2">
-                <div className="flex items-center">
+                 <div className="flex flex-col items-center">
                   <span>There is minimal or no support from supervisors and colleagues, accompanied by poor communication and feedback, as well as a lack of training and resources.
                   </span>
                 </div>
@@ -1940,14 +1918,6 @@ onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
       <TableCell>{shoulderBPscore}</TableCell>
       <TableCell>{shouldermdlLeftValue + shouldermdlRightValue}</TableCell>
       <TableCell>{shouldertotalscore}</TableCell>
-    </TableRow>
-
-    {/* Upper Arm Scores */}
-    <TableRow key="upper-arm">
-      <TableCell>Upper Arm</TableCell>
-      <TableCell>{upperArmBPscore}</TableCell>
-      <TableCell>{upperArmmdlLeftValue + upperArmmdlRightValue}</TableCell>
-      <TableCell>{upperArmtotalscore}</TableCell>
     </TableRow>
 
     {/* Lower Arm Scores */}
